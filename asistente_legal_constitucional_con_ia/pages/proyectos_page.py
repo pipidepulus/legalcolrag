@@ -75,87 +75,105 @@ class ProyectosState(rx.State):
 
 def render_table(data: rx.Var[list]) -> rx.Component:
     """Función auxiliar para renderizar la tabla de proyectos."""
-    return rx.el.table(
-        rx.el.thead(
-            rx.el.tr(
-                rx.el.th(
-                    "Número", 
-                    style={
-                        "border": "1px solid #60a5fa",
-                        "background_color": "#dbeafe", 
-                        "text_align": "center",
-                        "padding": "8px",
-                        "font_weight": "bold"
-                    }
-                ),
-                rx.el.th(
-                    "Título", 
-                    style={
-                        "border": "1px solid #60a5fa",
-                        "background_color": "#dbeafe",
-                        "padding": "8px",
-                        "font_weight": "bold"
-                    }
-                ),
-                rx.el.th(
-                    "Enlace", 
-                    style={
-                        "border": "1px solid #60a5fa",
-                        "background_color": "#dbeafe",
-                        "text_align": "center",
-                        "padding": "8px",
-                        "font_weight": "bold"
-                    }
-                ),
-            )
-        ),
-        rx.el.tbody(
-            rx.foreach(
-                data,
-                lambda row: rx.el.tr(
-                    rx.el.td(
-                        row["Número"],
+    return rx.el.div(  # Envolver la tabla en un contenedor con scroll
+        rx.el.table(
+            rx.el.thead(
+                rx.el.tr(
+                    rx.el.th(
+                        "Número",
                         style={
                             "border": "1px solid #60a5fa",
+                            "background_color": "#dbeafe",
                             "text_align": "center",
                             "padding": "8px",
-                            "font_size": "14px"
-                        }
+                            "font_weight": "bold",
+                            "white_space": "nowrap",  # Evitar que el texto se corte
+                        },
                     ),
-                    rx.el.td(
-                        row["Título"],
+                    rx.el.th(
+                        "Título",
                         style={
                             "border": "1px solid #60a5fa",
+                            "background_color": "#dbeafe",
                             "padding": "8px",
-                            "font_size": "14px"
-                        }
+                            "font_weight": "bold",
+                            "white_space": "nowrap",  # Evitar que el texto se corte
+                        },
                     ),
-                    rx.el.td(
-                        rx.cond(
-                            row["Enlace"] != "N/A",
-                            rx.link("Ver enlace", href=row["Enlace"], target="_blank", color="blue"),
-                            "N/A",
+                    rx.el.th(
+                        "Enlace",
+                        style={
+                            "border": "1px solid #60a5fa",
+                            "background_color": "#dbeafe",
+                            "text_align": "center",
+                            "padding": "8px",
+                            "font_weight": "bold",
+                            "white_space": "nowrap",  # Evitar que el texto se corte
+                        },
+                    ),
+                ),
+            ),
+            rx.el.tbody(
+                rx.foreach(
+                    data,
+                    lambda row: rx.el.tr(
+                        rx.el.td(
+                            row["Número"],
+                            style={
+                                "border": "1px solid #60a5fa",
+                                "text_align": "center",
+                                "padding": "8px",
+                                "font_size": "14px",
+                                "white_space": "nowrap",  # Evitar que el texto se corte
+                            },
+                        ),
+                        rx.el.td(
+                            row["Título"],
+                            style={
+                                "border": "1px solid #60a5fa",
+                                "padding": "8px",
+                                "font_size": "14px",
+                                "white_space": "nowrap",  # Evitar que el texto se corte
+                            },
+                        ),
+                        rx.el.td(
+                            rx.cond(
+                                row["Enlace"] != "N/A",
+                                rx.link(
+                                    "Ver enlace",
+                                    href=row["Enlace"],
+                                    target="_blank",
+                                    color="blue",
+                                ),
+                                "N/A",
+                            ),
+                            style={
+                                "border": "1px solid #60a5fa",
+                                "text_align": "center",
+                                "padding": "8px",
+                                "white_space": "nowrap",  # Evitar que el texto se corte
+                            },
                         ),
                         style={
-                            "border": "1px solid #60a5fa",
-                            "text_align": "center",
-                            "padding": "8px"
-                        }
+                            "background_color": "#eff6ff",
+                        },
                     ),
-                    style={
-                        "background_color": "#eff6ff"
-                    }
                 ),
-            )
+            ),
+            style={
+                "width": "100%",
+                "border_collapse": "collapse",
+                "margin_top": "1rem",
+                "border": "1px solid #60a5fa",
+            },
         ),
         style={
-            "width": "100%",
-            "border_collapse": "collapse",
-            "margin_top": "1rem",
-            "border": "1px solid #60a5fa"
-        }
+             "overflow_x": "auto",  # Permite scroll horizontal si la tabla es muy ancha
+            "overflow_y": "auto",  # Permite scroll vertical si la tabla es muy alta
+            "max_height": "500px",  # Limita la altura máxima del contenedor
+            "max_width": "100%",  # Limita el ancho máximo al tamaño del contenedor
+        },
     )
-
 
 # --- CAMBIO PRINCIPAL AQUÍ ---
 # 2. QUITAMOS @rx.page(...) Y AÑADIMOS @require_login
